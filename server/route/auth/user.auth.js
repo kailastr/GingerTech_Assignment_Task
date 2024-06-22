@@ -11,7 +11,7 @@ const router = express.Router();
 
 /*
 Route : /user/signup
-Methos : POST
+Method : POST
 Description : Create new user
 Access : Public
 Parameter : none
@@ -69,7 +69,7 @@ router.post('/signup', async (req, res) => {
 
 /*
 Route : /user/signin
-Methos : POST
+Method : POST
 Description : Authenticate user login
 Access : Public
 Parameter : none
@@ -105,7 +105,7 @@ router.post('/signin', async (req, res) => {
 
 /*
 Route : /user/logout
-Methos : POST
+Method : POST
 Description : User logout
 Access : Public
 Parameter : none

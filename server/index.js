@@ -7,6 +7,7 @@ import connectDB from "./db/dbConnect.js";
 
 //routes
 import auth from './route/auth/user.auth.js';
+import project from './route/project/project.route.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/user', auth);
+app.use('/project', project);
 
 const PORT = 4000;
 

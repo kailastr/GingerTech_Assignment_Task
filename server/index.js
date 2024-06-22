@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser";
 
 //DB Connecting Function
 import connectDB from "./db/dbConnect.js";
@@ -10,6 +11,9 @@ import auth from './route/auth/user.auth.js';
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use('/user', auth);
 

@@ -52,7 +52,7 @@ const LoginPage = () => {
                             Submit
                         </button>
                         <p className=' text-center'>
-                            don't have an account ? <Link to='/##'><span className='text-blue-700'>Register</span></Link>
+                            don't have an account ? <Link to='/project/signup'><span className='text-blue-700'>Register</span></Link>
                         </p>
                     </form>
 

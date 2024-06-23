@@ -10,7 +10,7 @@ const SignUpPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [gender, setGender] = useState("");
 
-    const loginSubmit = (e) => {
+    const signUpSubmit = (e) => {
         e.preventDefault();
         console.log(`fullName: ${fullName}, username: ${userName}, password ${password}, confirmPassword: ${confirmPassword}, gender: ${gender}`);
     }
@@ -21,7 +21,7 @@ const SignUpPage = () => {
                     <h1 className=' text-2xl underline decoration-cyan-600 py-2'>Register</h1>
                     <form
                         className='w-full my-5 px-3 flex flex-col gap-4'
-                        onSubmit={loginSubmit}
+                        onSubmit={signUpSubmit}
                     >
                         <div className='w-full flex flex-col justify-start'>
                             <label htmlFor="fullName" className=' text-cyan-700'>Full Name<span className=' text-red-600 px-1'>*</span></label>
@@ -104,7 +104,7 @@ const SignUpPage = () => {
                             Submit
                         </button>
                         <p className=' text-center'>
-                            Already have an accoutn ? <Link to='/##'><span className='text-blue-700'>Login</span></Link>
+                            Already have an accoutn ? <Link to='/project/login'><span className='text-blue-700'>Login</span></Link>
                         </p>
                     </form>
 

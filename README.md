@@ -7,6 +7,8 @@ Client Folder is for Front-end using React
 1. Tailwind <br>
 2. react-router-dom <br>
 3. React-icons <br>
+4. Material ui <br>
+5. classnames <br>
 
 ## /server
 Server Folder is for Back-end using Node.js, Express.js and MongoDB

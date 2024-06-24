@@ -1,15 +1,40 @@
 import React, { useState } from 'react';
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
 
+    const navigate = useNavigate();
+
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const loginSubmit = (e) => {
+    const loginSubmit = async (e) => {
         e.preventDefault();
-        console.log(userName, password);
+
+        try {
+            const response = await axios.post('http://localhost:4000/user/signin', {
+                userName,
+                password,
+            });
+            
+            localStorage.setItem("pic", response.data.profilePic);
+
+            console.log('Login successful!', response.data);
+            navigate('/project/all');
+
+        } catch (error) {
+            if (error.response) {
+                // Backend-related error (4XX or 5XX status code)
+                setErrorMessage(error.response.data.error);
+                alert(errorMessage);
+            } else {
+                // Network error or other unknown error
+                setErrorMessage('An error occurred. Please try again later.');
+                alert(errorMessage);
+            }
+        }
     }
 
     return (

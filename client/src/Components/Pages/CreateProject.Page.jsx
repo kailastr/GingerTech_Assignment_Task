@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 const CreateProjectPage = () => {
+
+    const navigate = useNavigate();
 
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
@@ -11,9 +15,41 @@ const CreateProjectPage = () => {
     const [team, setTeam] = useState([]);
     const [teamMember, setTeamMember] = useState("");
 
-    const submitProject = (e) => {
+    const submitProject = async (e) => {
         e.preventDefault();
-        console.log(`Project Name : ${projectName}, Description : ${projectDescription}, StartDate: ${startDate}, deadline: ${deadline}, client: ${client}, Budget: ${budget}, Team: ${team}`);
+        // console.log(`Project Name : ${projectName}, Description : ${projectDescription}, StartDate: ${startDate}, deadline: ${deadline}, client: ${client}, Budget: ${budget}, Team: ${team}`);
+
+        if (!localStorage.pic) {
+            alert("Login to Add Projects");
+            navigate('/project/login');
+        } else {
+            try {
+                const response = await fetch('http://localhost:4000/project/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        projectName,
+                        projectDescription,
+                        startDate,
+                        deadline,
+                        client,
+                        budget,
+                        team,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error creating project: ${await response.text()}`);
+                }
+
+                const newProject = await response.json();
+                alert('Project created successfully:', newProject);
+                navigate('/project/all'); // Redirect to projects list or success page
+            } catch (error) {
+                console.error('Error creating project:', error.message);
+                alert('An error occurred while creating the project. Please try again.');
+            }
+        }
     }
 
     const addTeamMember = (e) => {

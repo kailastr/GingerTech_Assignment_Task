@@ -22,13 +22,13 @@ router.post('/signup', async (req, res) => {
         const { fullName, userName, password, confirmPassword, gender } = req.body;
 
         if (password !== confirmPassword) {
-            return res.status(400).json({ error: "Password doesn't match" });
+            return res.json({ error: "Password doesn't match" });
         }
 
         const user = await User.findOne({ userName });
 
         if (user) {
-            return res.status(400).json({ error: "User already exist with this username" });
+            return res.json({ error: "User already exist with this username" });
         }
 
         //hash password with bcrypt
@@ -63,7 +63,7 @@ router.post('/signup', async (req, res) => {
 
     } catch (error) {
         console.log("SignUp Route error : ", error.message);
-        res.status(400).json({ error: error.message });
+        res.json({ error: error.message });
     }
 });
 
@@ -82,24 +82,25 @@ router.post('/signin', async (req, res) => {
         const validUser = await User.findOne({ userName });
         const isPasswordValid = await bcrypt.compare(password, validUser?.password || "");
 
-        if (!validUser) {
-            return res.status(400).json({ error: "Invalid UserName " });
+        if (!validUser || !isPasswordValid) {
+            return res.json({ error: "Invalid UserName Credentials" });
         }
 
-        if (!isPasswordValid) {
-            return res.status(400).json({ error: "Invalid UserName " });
-        }
+        if (validUser) {
 
-        return res.status(200).json({
-            _id: validUser._id,
-            fullName: validUser.fullName,
-            userName: validUser.userName,
-            profilePic: validUser.profilePic
-        });
+            generateJWTandSetCookies(validUser._id, res);
+
+            return res.status(200).json({
+                _id: validUser._id,
+                fullName: validUser.fullName,
+                userName: validUser.userName,
+                profilePic: validUser.profilePic
+            });
+        }
 
     } catch (error) {
         console.log("SignIn error : ", error.message);
-        return res.status(400).json({ error: error.message });
+        return res.json({ error: error.message });
     }
 });
 

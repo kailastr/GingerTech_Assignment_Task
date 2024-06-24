@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+// import jwt from 'jsonwebtoken';
 
 //icons
 import { LiaEyeSolid } from "react-icons/lia";
@@ -22,6 +24,8 @@ const ProjectDatatable = () => {
 
     const navigate = useNavigate();
 
+    const [projects, setProjects] = useState([]);
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -35,164 +39,56 @@ const ProjectDatatable = () => {
     };
 
     const viewProject = (event) => {
-        alert(event._id);
+        // alert(event._id);
         navigate(`/project/view/${event._id}`);
     };
 
     const editProject = (project) => {
-        navigate(`/project/edit/${project._id}`, { state: { project } });
-    }
 
-    const deleteProject = (event) => {
-
-    }
-
-    const projects = [
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
-        },
-        {
-            _id: "dummyid1",
-            projectName: "dummy 1",
-            projectDescription: "dummy description 1",
-            startDate: "2024-06-23",
-            deadline: "2024-08-30",
-            client: "Dummy client 1",
-            team: ["team member 1, team member 2"],
-            budget: 2000,
-            createdAt: "2024-06-23",
-            updatedAt: "2024-06-23"
+        if (!localStorage.pic) {
+            alert("Login to Edit Project Details");
+            navigate('/project/login');
         }
-    ];
+        else {
+            navigate(`/project/edit/${project._id}`, { state: { project } });
+        }
+    }
+
+    const deleteProject = async (event) => {
+        console.log(event);
+        if (!localStorage.pic) {
+            alert("Login to Delete Project");
+            navigate('/project/login');
+            return;
+        } else {
+            try {
+                const { data } = await axios.delete(`http://localhost:4000/project/delete/${event._id}`);
+
+                console.log('Project deleted successfully:', data);
+                alert('Project deleted successfully!');
+
+                fetchProjects();
+
+            } catch (error) {
+                console.error('Error deleting project:', error.message);
+                alert('An error occurred while deleting the project. Please try again.');
+            }
+        }
+    }
+
+    const fetchProjects = async () => {
+        try {
+            const response = await axios.get('http://localhost:4000/project/all');
+            setProjects(response.data.projects);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+            alert({ "error": error.message });
+        }
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -206,40 +102,55 @@ const ProjectDatatable = () => {
                             <TableCell align="right">Deadline</TableCell>
                             <TableCell align="right">Client</TableCell>
                             <TableCell align="right">Budget</TableCell>
-                            {/* <TableCell align="right">Budget</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {projects
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => (
-                                <TableRow
+                        {projects ? (
+                            projects.length > 0 ? (
+                                projects
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row) => (
+                                        <TableRow
 
-                                    key={row._id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row" className=' flex gap-1'>
-                                        <div className='flex justify-start items-center gap-1 -z-10'>
-                                            <Fab size='small' color='primary' aria-label="view" title='View Project Details' onClick={() => viewProject(row)}>
-                                                <LiaEyeSolid />
-                                            </Fab>
-                                            <Fab size='small' color="secondary" aria-label="edit" title='Edit Project Details' onClick={() => editProject(row)}>
-                                                <EditIcon />
-                                            </Fab>
-                                            <Fab size='small' color="error" aria-label="delete" title='Delete Project' onClick={deleteProject}>
-                                                <DeleteIcon />
-                                            </Fab>
-                                        </div>
+                                            key={row._id}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row" className=' flex gap-1'>
+                                                <div className='flex justify-start items-center gap-1 -z-10'>
+                                                    <Fab size='small' color='primary' aria-label="view" title='View Project Details' onClick={() => viewProject(row)}>
+                                                        <LiaEyeSolid />
+                                                    </Fab>
+                                                    <Fab size='small' color="secondary" aria-label="edit" title='Edit Project Details' onClick={() => editProject(row)}>
+                                                        <EditIcon />
+                                                    </Fab>
+                                                    <Fab size='small' color="error" aria-label="delete" title='Delete Project' onClick={() => deleteProject(row)}>
+                                                        <DeleteIcon />
+                                                    </Fab>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {row.projectName}
+                                            </TableCell>
+                                            <TableCell>{row.projectDescription}</TableCell>
+                                            <TableCell align="right">{row.deadline}</TableCell>
+                                            <TableCell align="right">{row.client}</TableCell>
+                                            <TableCell align="right">{row.budget}</TableCell>
+                                        </TableRow>
+                                    ))
+                            ) : (
+                                <TableRow >
+                                    <TableCell colSpan={6} align='center'>
+                                        No Projects Found !!
                                     </TableCell>
-                                    <TableCell component="th" scope="row">
-                                        {row.projectName}
-                                    </TableCell>
-                                    <TableCell>{row.projectDescription}</TableCell>
-                                    <TableCell align="right">{row.deadline}</TableCell>
-                                    <TableCell align="right">{row.client}</TableCell>
-                                    <TableCell align="right">{row.budget}</TableCell>
                                 </TableRow>
-                            ))}
+                            )
+                        ) : (
+                            <TableRow >
+                                <TableCell colSpan={6} align='center'>
+                                    Projects Loading..
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

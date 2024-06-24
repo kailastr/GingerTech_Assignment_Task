@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
+import cors from 'cors';
 
 //DB Connecting Function
 import connectDB from "./db/dbConnect.js";
@@ -15,6 +16,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use('/user', auth);
 app.use('/project', project);

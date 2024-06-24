@@ -17,6 +17,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path='/' element={<Navigate to='/project/login' />} />
         <Route path='/project' element={<DefaultLayout />}>
           <Route path='all' element={<ProjectCollection />} />
           <Route path='edit/:id' element={<EditProjectPage />} />

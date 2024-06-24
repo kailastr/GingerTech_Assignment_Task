@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const EditProjectPage = () => {
     const location = useLocation();
     const { project } = location.state;
 
+    var { id } = useParams();
     const [projectName, setProjectName] = useState(project.projectName);
     const [projectDescription, setProjectDescription] = useState(project.projectDescription);
     const [startDate, setStartDate] = useState(project.startDate);
@@ -14,9 +16,31 @@ const EditProjectPage = () => {
     const [team, setTeam] = useState(project.team);
     const [teamMember, setTeamMember] = useState(project);
 
-    const submitProject = (e) => {
+    const submitProject = async (e) => {
         e.preventDefault();
-        console.log(`Project Name: ${projectName}, Description: ${projectDescription}, StartDate: ${startDate}, Deadline: ${deadline}, Client: ${client}, Budget: ${budget}, Team: ${team}`);
+        // console.log(`Project Name: ${projectName}, Description: ${projectDescription}, StartDate: ${startDate}, Deadline: ${deadline}, Client: ${client}, Budget: ${budget}, Team: ${team}`);
+        e.preventDefault();
+
+        try {
+            const updatedProject = {
+                projectName,
+                projectDescription,
+                startDate,
+                deadline,
+                client,
+                budget,
+                team,
+            };
+
+            const response = await axios.put(`http://localhost:4000/project/update/${id}`, updatedProject);
+            console.log("Project Update Response:", response.data);
+            alert("Successfully Updated");
+
+            // Handle successful update (e.g., redirect to project view page)
+        } catch (error) {
+            console.error("Project Update Error:", error.message);
+            // Handle errors appropriately (e.g., display error message)
+        }
     };
 
     const addTeamMember = (e) => {
@@ -139,7 +163,7 @@ const EditProjectPage = () => {
 
                         {/* button section */}
                         <div className='w-full flex flex-col md:flex-row justify-center items-center gap-2'>
-                            <button type='submit' className='px-10 py-1 border-2 border-blue-600 rounded-md font-semibold bg-blue-200 hover:bg-blue-300 hover:shadow-lg transition duration-200 ease-in-out'>Submit</button>
+                            <button type='submit' className='px-10 py-1 border-2 border-blue-600 rounded-md font-semibold bg-blue-200 hover:bg-blue-300 hover:shadow-lg transition duration-200 ease-in-out'>Update</button>
                             <button type='reset' className='px-10 py-1 border-2 border-red-600 rounded-md font-semibold bg-red-200 hover:bg-red-300 hover:shadow-lg transition duration-200 ease-in-out'>Cancel</button>
                         </div>
                     </div>
